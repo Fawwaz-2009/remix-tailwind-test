@@ -1,41 +1,25 @@
-# Welcome to Remix!
+# TailwindCss Purging is not working correctly with Docker
 
-- [Remix Docs](https://remix.run/docs)
-
-## Fly Setup
-
-1. [Install `flyctl`](https://fly.io/docs/getting-started/installing-flyctl/)
-
-2. Sign up and log in to Fly
-
-```sh
-flyctl auth signup
+## What is working
+- TailwindCss is working correctly in development mode
 ```
-
-3. Setup Fly. It might ask if you want to deploy, say no since you haven't built the app yet.
-
-```sh
-flyctl launch
-```
-
-## Development
-
-From your terminal:
-
-```sh
 npm run dev
 ```
 
-This starts your app in development mode, rebuilding assets on file changes.
-
-## Deployment
-
-If you've followed the setup instructions already, all you need to do is run this:
-
-```sh
-npm run deploy
+- Also in production mode with the following command
+```
+npm run build
+npm run start
 ```
 
-You can run `flyctl info` to get the url and ip address of your server.
+- Also deploying to Vercel WITHOUT docker is working correctly
 
-Check out the [fly docs](https://fly.io/docs/getting-started/node/) for more information.
+## What is not working
+- Deploying to fly.io with docker (this how fly.io works), is not working correctly. Specifically, the purging of tailwindcss is not working correctly. You can see by inspecting the css files included that the `@tailwind` commands are not being replaced with used classes.
+
+- To insure that the problem is because of docker, I've build and run the project with docker locally and it indeed has the same problem. You can do the same by running the following commands:
+```
+docker build -t remix-tailwind-test .
+docker run -e PORT=8080 -p 8080:8080 remix-tailwind-test
+```
+
